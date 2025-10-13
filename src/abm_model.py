@@ -2,24 +2,31 @@ from dataclasses import dataclass
 import numpy as np, random
 from utils.seed import set_seed
 
-EMPTY = 0
-PREY = 1
-PRED = 2
+# Constants for grid cell states
+EMPTY = 0 # No agent
+PREY = 1 # Prey agent
+PRED = 2 # Predator agent
 
 @dataclass
 class ABMParams:
-    width: int = 60
+    # Grid
+    width: int = 60 
     height: int = 60
     steps: int = 400
+    # Initial populations
     init_prey: int = 900
     init_pred: int = 300
-    p_birth_prey: float = 0.05
-    p_birth_pred: float = 0.02
-    prey_move_range: int = 1
-    pred_move_range: int = 1
+    # Birth probabilities
+    p_birth_prey: float = 0.05 
+    p_birth_pred: float = 0.02 
+    # Mobility ranges
+    prey_move_range: int = 1 
+    pred_move_range: int = 1 
+    # Energy parameters for predators
     pred_init_energy: int = 5
     pred_energy_gain: int = 3
     pred_energy_cost: int = 1
+    
     refugia_fraction: float = 0.15
     refugia_pred_penalty: float = 0.5
     adaptive_window: int = 5

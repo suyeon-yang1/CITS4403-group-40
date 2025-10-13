@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 @dataclass
 class ODEParams:
@@ -23,3 +23,10 @@ def lotka_volterra(x0=40., y0=9., params: ODEParams = ODEParams()):
         Y[i+1] = max(0.0, y + params.dt*dy)
         T[i+1] = T[i] + params.dt
     return T, X, Y
+
+def statistics(X, Y):
+    max_prey = np.max(X)
+    min_prey = np.min(X)
+    max_pred = np.max(Y)
+    min_pred = np.min(Y)
+    return max_prey, min_prey, max_pred, min_pred
