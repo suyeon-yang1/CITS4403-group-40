@@ -4,4 +4,16 @@
 # Python
 __pycache__/
 *.pyc
+.vscode/
+.idea/
+*.pkl
+*.sqlite3
+*.db
+
+# Jupyter checkpoints
 .ipynb_checkpoints/
+
+# Environments
+.venv/
+env/
+venv/
