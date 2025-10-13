@@ -24,6 +24,12 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Register kernel
+
+```bash
+python -m ipykernel install --user --name=venv --display-name "your venv name"
+```
+
 ## Launch notebook
 
 ```bash
