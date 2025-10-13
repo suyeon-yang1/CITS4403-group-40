@@ -35,3 +35,5 @@ python -m ipykernel install --user --name=venv --display-name "your venv name"
 ```bash
 jupyter notebook
 ```
+
+Make sure you change your kernel to your created venv environment before running. 
