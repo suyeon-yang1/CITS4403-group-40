@@ -10,16 +10,16 @@ PRED = 2 # Predator agent
 @dataclass
 class ABMParams:
     # Grid
-    width: int = 60 
+    width: int = 60 # 3600 positions
     height: int = 60
     steps: int = 400
     # Initial populations
     init_prey: int = 900
     init_pred: int = 300
-    # Birth probabilities
+    # Reproducing probabilities
     p_birth_prey: float = 0.05 
     p_birth_pred: float = 0.02 
-    # Mobility ranges
+    # Movement ranges
     prey_move_range: int = 1 
     pred_move_range: int = 1 
     # Energy parameters for predators
@@ -27,13 +27,16 @@ class ABMParams:
     pred_energy_gain: int = 3
     pred_energy_cost: int = 1
     
-    refugia_fraction: float = 0.15
-    refugia_pred_penalty: float = 0.5
-    adaptive_window: int = 5
+    # Safe zone parameters
+    refugia_fraction: float = 0.15 # 15%% of grid cells are refugia
+    refugia_pred_penalty: float = 0.5 # 50% reduction in predation success in refugia
+    adaptive_window: int = 5 # recent predation count threshold for prey to adaptively move further
 
+# Wrap around edges to avoid artificial boundaries and infinite world
 def torus_coords(x, y, W, H):
     return x % W, y % H
 
+# Get neighboring coordinates within a given range r
 def neighbors(x, y, W, H, r=1):
     coords = []
     for dx in range(-r, r+1):
@@ -44,6 +47,7 @@ def neighbors(x, y, W, H, r=1):
             coords.append((nx, ny))
     return coords
 
+# Initialize the world with agents and refugia
 def init_world(p: ABMParams):
     W, H = p.width, p.height
     grid = np.zeros((H, W), dtype=np.int8)
@@ -52,14 +56,14 @@ def init_world(p: ABMParams):
 
     # refugia placement
     n_refugia = int(p.refugia_fraction * W * H)
-    idx = np.random.choice(W*H, size=n_refugia, replace=False)
+    idx = np.random.choice(W*H, size=n_refugia, replace=False) 
     for flat in idx:
         y, x = divmod(flat, W)
         refugia[y, x] = 1
 
     # place agents
     cells = np.arange(W*H)
-    np.random.shuffle(cells)
+    np.random.shuffle(cells) # Randomises all cells for unbiased random placement
     # Prey first
     for flat in cells[:p.init_prey]:
         y, x = divmod(flat, W)
@@ -73,6 +77,7 @@ def init_world(p: ABMParams):
     recent_pred = np.zeros((H, W), dtype=np.int16)
     return grid, energy, refugia, recent_pred
 
+# One simulation step
 def step(world, p: ABMParams):
     grid, energy, refugia, recent = world
     H, W = grid.shape
@@ -80,7 +85,7 @@ def step(world, p: ABMParams):
     new_energy = energy.copy()
     new_recent = (recent * 0.9).astype(np.int16)  # decay
 
-    # PREY
+    # PREY  
     order = np.random.permutation(H*W)
     for flat in order:
         y, x = divmod(flat, W)

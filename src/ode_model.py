@@ -4,14 +4,16 @@ import numpy as np
 
 @dataclass
 class ODEParams:
-    alpha: float = 1.0   # prey birth
-    beta: float = 0.1    # predation
-    delta: float = 0.075 # efficiency
+    alpha: float = 1.0   # prey birth rate
+    beta: float = 0.1    # predation - how often predators encounter prey
+    delta: float = 0.075 # efficiency - how well predators convert prey to new predators
     gamma: float = 1.5   # predator death
-    dt: float = 0.01
-    t_end: float = 50.0
+    dt: float = 0.01 # time step (increment)
+    t_end: float = 50.0 # end time of simulation
 
+# Lotka-Volterra model simulation
 def lotka_volterra(x0=40., y0=9., params: ODEParams = ODEParams()):
+    # x: prey, y: pred
     n_steps = int(params.t_end / params.dt)
     X = np.zeros(n_steps+1); Y = np.zeros(n_steps+1); T = np.zeros(n_steps+1)
     X[0] = x0; Y[0] = y0

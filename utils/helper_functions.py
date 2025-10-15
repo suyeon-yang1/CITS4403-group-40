@@ -24,7 +24,7 @@ def mean_ci(arr2d):
 
 # Proportion of runs where final population < threshold
 def extinction_prob(mat, threshold=1):
-    final = mat[:, -1]
+    final = mat[:, -1] # final populations
     return (final < threshold).mean()
 
 def plot_with_ci(mean, lo, hi, label):
